@@ -1,29 +1,32 @@
 from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload, selectinload
 
 from schemas.pagination import Pagination
 from schemas.users import (
     User as UserSchema,
     UserCreate as UserCreateSchema,
+    UserWithProjects,
 )
-from models.users import User as UserModel
+from models import User as UserModel
 
 
 class UserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_all(self, pagination: Pagination) -> list[UserSchema]:
+    async def get_all(self, pagination: Pagination) -> list[UserWithProjects]:
         stmt = (
             select(UserModel)
+            .options(selectinload(UserModel.projects))
             .limit(pagination.limit)
             .offset(pagination.limit * pagination.offset)
         )
         res = await self.session.execute(stmt)
 
         return [
-            UserSchema.model_validate(instance, from_attributes=True)
-            for instance in res.scalars().all()
+            UserWithProjects.model_validate(instance, from_attributes=True)
+            for instance in res.unique().scalars().all()
         ]
 
     async def get_one(self, id: int) -> UserSchema | None:

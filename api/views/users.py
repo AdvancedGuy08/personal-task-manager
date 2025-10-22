@@ -2,12 +2,12 @@ from fastapi import APIRouter, HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
 from ..dependencies import PaginationDep, UserDataCreateDep, UserServiceDep
-from schemas.users import User
+from schemas.users import User, UserWithProjects
 
 users = APIRouter(prefix="/api/users")
 
 
-@users.get("", response_model=list[User])
+@users.get("", response_model=list[UserWithProjects])
 async def get_users(pagination: PaginationDep, user_service: UserServiceDep):
     return await user_service.get_all(pagination)
 

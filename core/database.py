@@ -1,3 +1,4 @@
+from typing import Any
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -22,4 +23,9 @@ async def get_async_session():
 
 
 class Base(DeclarativeBase):
-    pass
+    def __repr__(self):
+        def create_col_str(col: Any):
+            return f"{col}={getattr(self, col)}"
+
+        cols = [create_col_str(col) for col in self.__table__.columns.keys()]
+        return f"<{self.__class__.__name__} {', '.join(cols)}>"

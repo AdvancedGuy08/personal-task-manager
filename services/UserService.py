@@ -1,13 +1,13 @@
 from repositories import UserRepository
 from schemas.pagination import Pagination
-from schemas.users import User, UserCreate
+from schemas.users import User, UserCreate, UserWithProjects
 
 
 class UserService:
     def __init__(self, users_repo: UserRepository):
         self.users_repo = users_repo
 
-    async def get_all(self, pagination: Pagination) -> list[User]:
+    async def get_all(self, pagination: Pagination) -> list[UserWithProjects]:
         return await self.users_repo.get_all(pagination)
 
     async def get_by_id(self, user_id: int) -> User | None:

@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel, EmailStr
 
 from .timestamp import Timestamp
@@ -16,3 +17,7 @@ class UserMeta(Timestamp):
 
 class User(UserCreate, UserMeta):
     id: int
+
+
+class UserWithProjects(User):
+    projects: list[Any]
