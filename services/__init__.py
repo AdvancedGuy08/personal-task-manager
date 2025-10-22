@@ -1,3 +1,4 @@
-__all__ = ("UserService",)
+__all__ = ("UserService", "ProjectService")
 
+from .ProjectService import ProjectService
 from .UserService import UserService

@@ -9,11 +9,11 @@ from core.database import Base, async_engine
 async def lifespan(app: FastAPI):
     # async with async_engine.begin() as conn:
     #     await conn.run_sync(Base.metadata.create_all)
-    # yield
+    #     print("База создана")
+    yield
     # async with async_engine.begin() as conn:
     #     await conn.run_sync(Base.metadata.drop_all)
-
-    yield
+    #     print("База очищена")
 
 
 def create_app() -> FastAPI:

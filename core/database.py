@@ -1,6 +1,6 @@
 from typing import Any
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from core.config import config
 
@@ -23,6 +23,8 @@ async def get_async_session():
 
 
 class Base(DeclarativeBase):
+    id: Mapped[int] = mapped_column(primary_key=True)
+
     def __repr__(self):
         def create_col_str(col: Any):
             return f"{col}={getattr(self, col)}"

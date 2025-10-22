@@ -4,13 +4,12 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
-from repositories import UserRepository
-from schemas.pagination import Pagination
-from schemas.users import UserCreate
-from services import UserService
+from repositories import ProjectRepository, UserRepository
+import schemas
+from services import ProjectService, UserService
 
 
-PaginationDep = Annotated[Pagination, Depends()]
+PaginationDep = Annotated[schemas.Pagination, Depends()]
 SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 
 
@@ -26,4 +25,19 @@ def get_user_service(user_repo: UserRepositoryDep):
 
 
 UserServiceDep = Annotated[UserService, Depends(get_user_service)]
-UserDataCreateDep = Annotated[UserCreate, Depends()]
+UserDataCreateDep = Annotated[schemas.UserCreate, Depends()]
+
+
+def get_project_repository(session: SessionDep):
+    return ProjectRepository(session)
+
+
+ProjectRepoDep = Annotated[ProjectRepository, Depends(get_project_repository)]
+
+
+def get_project_service(project_repo: ProjectRepoDep):
+    return ProjectService(project_repo)
+
+
+ProjectServiceDep = Annotated[ProjectService, Depends(get_project_service)]
+ProjectDataCreateDep = Annotated[schemas.ProjectCreate, Depends()]

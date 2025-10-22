@@ -1,5 +1,5 @@
 import datetime as dt
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import CheckConstraint, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database import Base
@@ -8,7 +8,6 @@ from core.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
     first_name: Mapped[str]
     last_name: Mapped[str | None]
     username: Mapped[str] = mapped_column(unique=True, index=True)
@@ -25,9 +24,12 @@ class User(Base):
 
 class Project(Base):
     __tablename__ = "projects"
+    __table_args__ = (
+        CheckConstraint("LENGTH(name) >= 3", name="ck_name_min_length"),
+        CheckConstraint("LENGTH(name) <= 128", name="ck_name_max_length"),
+    )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(index=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     owner: Mapped["User"] = relationship(back_populates="projects")
