@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated
 
 from fastapi import Depends
@@ -41,3 +42,18 @@ def get_project_service(project_repo: ProjectRepoDep):
 
 ProjectServiceDep = Annotated[ProjectService, Depends(get_project_service)]
 ProjectDataCreateDep = Annotated[schemas.ProjectCreate, Depends()]
+
+
+def get_current_user():
+    return schemas.User(
+        created_at=datetime.now(),
+        email="crutch@email.com",
+        first_name="Crutch",
+        username="crutch",
+        id=1,
+        is_active=True,
+        updated_at=datetime.now(),
+    )
+
+
+CurrentUserDep = Annotated[schemas.User, Depends(get_current_user)]

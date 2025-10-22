@@ -23,8 +23,6 @@ class ProjectRepository(Repository):
         ]
 
     async def get_one(self, id: int) -> schemas.Project | None:
-        stmt = select(self.model).where(self.model.id == id)
-        res = await self.session.execute(stmt)
-        project = res.scalar()
+        project = await self._get_one(id)
         if project is not None:
             return schemas.Project.model_validate(project, from_attributes=True)

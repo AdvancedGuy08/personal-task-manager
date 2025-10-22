@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel
 from sqlalchemy import delete, insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,6 +28,9 @@ class AbstractRepository(ABC):
 
 class Repository(AbstractRepository):
     model = None
+
+    async def _get_one(self, id: int) -> Any | None:
+        return await self.session.get(self.model, id)
 
     async def add_one(self, data: BaseModel) -> int:
         stmt = insert(self.model).values(**data.model_dump()).returning(self.model.id)

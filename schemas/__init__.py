@@ -16,8 +16,12 @@ class ProjectCreate(BaseModel):
     name: str = Field(..., min_length=3, max_length=128)
 
 
-class Project(ProjectCreate):
+class ProjectCreateExtended(ProjectCreate):
     owner_id: int
+
+
+class Project(ProjectCreate):
+    id: int
 
 
 class ProjectWithOwner(Project):

@@ -14,7 +14,7 @@ class ProjectService:
     async def get_by_id(self, user_id: int) -> schemas.Project | None:
         return await self.project_repo.get_one(user_id)
 
-    async def add_one(self, data: schemas.ProjectCreate) -> int:
+    async def add_one(self, data: schemas.ProjectCreateExtended) -> int:
         return await self.project_repo.add_one(data)
 
     async def delete(self, user_id: int) -> None:
