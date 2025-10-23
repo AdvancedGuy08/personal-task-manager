@@ -26,7 +26,7 @@ def get_user_service(user_repo: UserRepositoryDep):
 
 
 UserServiceDep = Annotated[UserService, Depends(get_user_service)]
-UserDataCreateDep = Annotated[schemas.UserCreate, Depends()]
+UserDataCreateDep = Annotated[schemas.UserCreate, Body]
 
 
 def get_project_repository(session: SessionDep):
@@ -46,7 +46,7 @@ def get_project_service(project_repo: ProjectRepoDep):
 
 
 ProjectServiceDep = Annotated[ProjectService, Depends(get_project_service)]
-ProjectDataCreateDep = Annotated[schemas.ProjectCreate, Depends()]
+ProjectDataCreateDep = Annotated[schemas.ProjectCreate, Body]
 
 
 def get_current_user():
@@ -69,4 +69,4 @@ def get_tag_service(tag_repo: TagRepoDep):
 
 
 TagServiceDep = Annotated[TagService, Depends(get_tag_service)]
-TagDataCreateDep = Annotated[schemas.TagCreate, Depends()]
+TagDataCreateDep = Annotated[schemas.TagCreate, Body]
