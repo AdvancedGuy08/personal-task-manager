@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Body, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
-from repositories import ProjectRepository, UserRepository
+from repositories import ProjectRepository, TagRepository, UserRepository
 import schemas
-from services import ProjectService, UserService
+from services import ProjectService, TagService, UserService
 
 
 PaginationDep = Annotated[schemas.Pagination, Depends()]
@@ -33,7 +33,12 @@ def get_project_repository(session: SessionDep):
     return ProjectRepository(session)
 
 
+def get_tag_repository(session: SessionDep):
+    return TagRepository(session)
+
+
 ProjectRepoDep = Annotated[ProjectRepository, Depends(get_project_repository)]
+TagRepoDep = Annotated[TagRepository, Depends(get_tag_repository)]
 
 
 def get_project_service(project_repo: ProjectRepoDep):
@@ -57,3 +62,11 @@ def get_current_user():
 
 
 CurrentUserDep = Annotated[schemas.User, Depends(get_current_user)]
+
+
+def get_tag_service(tag_repo: TagRepoDep):
+    return TagService(tag_repo)
+
+
+TagServiceDep = Annotated[TagService, Depends(get_tag_service)]
+TagDataCreateDep = Annotated[schemas.TagCreate, Depends()]

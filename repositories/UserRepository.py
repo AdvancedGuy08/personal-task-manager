@@ -11,7 +11,7 @@ class UserRepository(Repository):
 
     async def get_all(
         self, pagination: schemas.Pagination
-    ) -> list[schemas.UserWithProjects]:
+    ) -> list[schemas.UserWithRelations]:
         stmt = (
             select(self.model)
             .options(selectinload(self.model.projects))
@@ -21,7 +21,7 @@ class UserRepository(Repository):
         res = await self.session.execute(stmt)
 
         return [
-            schemas.UserWithProjects.model_validate(instance, from_attributes=True)
+            schemas.UserWithRelations.model_validate(instance, from_attributes=True)
             for instance in res.unique().scalars().all()
         ]
 

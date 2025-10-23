@@ -8,7 +8,7 @@ class UserService:
 
     async def get_all(
         self, pagination: schemas.Pagination
-    ) -> list[schemas.UserWithProjects]:
+    ) -> list[schemas.UserWithRelations]:
         return await self.users_repo.get_all(pagination)
 
     async def get_by_id(self, user_id: int) -> schemas.User | None:

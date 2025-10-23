@@ -20,12 +20,36 @@ class ProjectCreateExtended(ProjectCreate):
     owner_id: int
 
 
-class Project(ProjectCreate):
+class Project(ProjectCreateExtended, Timestamp):
     id: int
 
 
-class ProjectWithOwner(Project):
+class ProjectWithRelations(Project):
     owner: "User"
+    tags: list["Tag"]
+
+
+class ProjectUpdate(BaseModel):
+    name: str | None = Field(None, min_length=3, max_length=128)
+    tags: list["Tag"] | None = None
+
+
+class TagCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=32)
+    color: str = Field(..., min_length=6, max_length=6)
+
+
+class TagCreateExtended(TagCreate):
+    author_id: int
+
+
+class Tag(TagCreateExtended):
+    id: int
+
+
+class TagWithRelations(Tag):
+    author: "User"
+    projects: list["Project"]
 
 
 class UserCreate(BaseModel):
@@ -43,5 +67,6 @@ class User(UserCreate, UserMeta):
     id: int
 
 
-class UserWithProjects(User):
-    projects: list[Project]
+class UserWithRelations(User):
+    projects: list["Project"]
+    authored_tags: list["Tag"]

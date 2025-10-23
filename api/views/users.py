@@ -6,7 +6,7 @@ import schemas
 users = APIRouter(prefix="/api/users", tags=["Users"])
 
 
-@users.get("", response_model=list[schemas.UserWithProjects])
+@users.get("", response_model=list[schemas.UserWithRelations])
 async def get_users(pagination: PaginationDep, user_service: UserServiceDep):
     return await user_service.get_all(pagination)
 

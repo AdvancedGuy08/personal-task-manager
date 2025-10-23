@@ -1,4 +1,6 @@
+from datetime import datetime
 from typing import Any
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -24,6 +26,10 @@ async def get_async_session():
 
 class Base(DeclarativeBase):
     id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        server_default=func.now(), onupdate=func.now()
+    )
 
     def __repr__(self):
         def create_col_str(col: Any):
