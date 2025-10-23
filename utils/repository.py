@@ -1,6 +1,6 @@
 from typing import Any
 from pydantic import BaseModel
-from sqlalchemy import delete, insert, update
+from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from abc import ABC
