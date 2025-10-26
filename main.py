@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from api.views import include_routers
 from core.database import Base, async_engine
+from middlewares import add_midlewares
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
 
+    add_midlewares(app)
     include_routers(app)
 
     return app
